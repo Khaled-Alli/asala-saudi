@@ -3,24 +3,33 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/helpers/colors/colors.dart';
 
-class AppTextFormField extends StatelessWidget {
+class AppTextFormField extends StatefulWidget {
   AppTextFormField({
     super.key,
     required this.textFormController,
     required this.hintText,
     required this.validator,
+    this.isPassword = false ,
   });
 
   TextEditingController textFormController;
   String hintText;
   Function(String?) validator;
+  bool isPassword;
+
+  @override
+  State<AppTextFormField> createState() => _AppTextFormFieldState();
+}
+
+class _AppTextFormFieldState extends State<AppTextFormField> {
+  bool obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 70.h,
       child: TextFormField(
-        controller: textFormController,
+        controller: widget.textFormController,
         decoration:  InputDecoration(
             constraints: BoxConstraints(maxHeight: 100.h, minHeight: 100.h),
            // labelText: "Your Label",
@@ -53,13 +62,27 @@ class AppTextFormField extends StatelessWidget {
             ),
           ),
           //prefixIcon: prefixIcon,
-          hintText: hintText,
+          hintText: widget.hintText,
+          suffixIcon:
+          widget.isPassword?
+          IconButton(
+            onPressed: () {
+              setState(() {
+                obscureText = !obscureText;
+              });
+            },
+            icon: Icon(
+              !obscureText ? Icons.visibility : Icons.visibility_off,
+              color: AppColors.mainColor,
+            ),
+          ):SizedBox(),
           errorStyle: const TextStyle(color: Colors.red),
         ),
+        obscureText: obscureText,
         keyboardType: TextInputType.text,
         //  textDirection:TextDirection.rtl,
         validator: (value) {
-          return validator(value);
+          return widget.validator(value);
         },
       ),
     );

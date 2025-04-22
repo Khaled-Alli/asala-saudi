@@ -1,8 +1,10 @@
 import 'package:asala_saudi/core/helpers/colors/colors.dart';
 import 'package:asala_saudi/core/networking/web_services.dart';
 import 'package:asala_saudi/feature/model/product/product.dart';
+import 'package:asala_saudi/feature/presentation/home/widgets/payment_method_BSH.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/helpers/extentions/extentions.dart';
@@ -101,12 +103,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () async{
-                    await WebServices().purchaseProduct(widget.product.id!);
-                    await WebServices().getUser();
-                    setState((){});
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('تم الشراء بنجاح!')),
-                    );
+                     HapticFeedback.lightImpact();
+                     showModalBottomSheet(
+                         context: context,
+                         shape: RoundedRectangleBorder(
+                             borderRadius: BorderRadius.circular(16)),
+                         builder: (context) {
+                           return  PaymentMethodsBottomSheet( widget.product) ;
+                         });
+                    // await WebServices().purchaseProduct(widget.product.id!);
+                    // await WebServices().getUser();
+                    // setState((){
+                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم الشراء بنجاح!')),);
+                    // });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightGreen,

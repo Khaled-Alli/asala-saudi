@@ -128,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     textFormController: passwordController,
                     hintText: 'Enter your password',
                     validator: (String)=>genericValidator(String),
+                    isPassword: true,
                   ),
                   const SizedBox(height: 10),
                   Row(

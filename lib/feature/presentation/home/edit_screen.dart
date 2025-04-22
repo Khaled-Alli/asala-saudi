@@ -132,26 +132,26 @@ class _EditScreenState extends State<EditScreen> {
           
           
                     }),
-                    _buildProfileButton("Share",(){HapticFeedback.lightImpact();
-                    context.pushNamed(Routes.shareScreen);
+                    _buildProfileButton("add product",(){HapticFeedback.lightImpact();
+                    context.pushNamed(Routes.addProductScreen);
                     }),
                   ],
                 ),
-                GestureDetector(
-                  child: SizedBox(width: 300.w,
-                  height: 300.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add,size: 40,),
-                      horizontalSpace(10),
-                      Text("add product", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                    ],
-                  ),),
-                  onTap: (){
-                    context.pushNamed(Routes.addProductScreen);
-                  },
-                ),
+                // GestureDetector(
+                //   child: SizedBox(width: 300.w,
+                //   height: 300.h,
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Icon(Icons.add,size: 40,),
+                //       horizontalSpace(10),
+                //       Text("add product", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                //     ],
+                //   ),),
+                //   onTap: (){
+                //     context.pushNamed(Routes.addProductScreen);
+                //   },
+                // ),
               ],
             ),
           ),

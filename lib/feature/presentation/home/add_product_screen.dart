@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:asala_saudi/core/networking/data.dart';
+import 'package:asala_saudi/feature/model/category/category.dart';
 import 'package:asala_saudi/feature/presentation/auth/widgets/app_text_form_field.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     String base64String = base64Encode(imageBytes); // Convert bytes to base64 string
     return base64String;
   }
-
+  Category selected = MyAppData.categories[0];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,11 +110,51 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                   const SizedBox(height: 10),
 
-                  AppTextFormField(
-                    textFormController: productSpecializationController,
-                    hintText: 'product category',
-                    validator: (String) => genericValidator(String),
-                  ), const SizedBox(height: 10),
+                  // AppTextFormField(
+                  //   textFormController: productSpecializationController,
+                  //   hintText: 'product category',
+                  //   validator: (String) => genericValidator(String),
+                  // ),
+
+                  DropdownButtonFormField<Category>(
+                    menuMaxHeight: 300.h,
+                    value: selected,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.h),
+                      filled: true,
+                      fillColor: AppColors.whiteColor,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(color: AppColors.mainColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(color: AppColors.mainColor),
+                      ),
+                    ),
+                    dropdownColor: AppColors.appGrayColor,
+                    icon: const Icon(Icons.arrow_drop_down, color: AppColors.mainColor),
+                    style: TextStyle(color: AppColors.mainColor, fontSize: 14.sp),
+                    items: MyAppData.categories.map((category) {
+                      return DropdownMenuItem<Category>(
+                        value: category,
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: SizedBox(
+                           // width: 110.w,
+                            child: Text(category.name??"",  maxLines: 1, overflow: TextOverflow.ellipsis),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (category) {
+                      if (category != null) {
+                        setState(() {});
+                        selected= category;
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 10),
                   GestureDetector(
                     child: SizedBox(width: 120.w,
                       height: 80.h,
@@ -140,25 +181,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     onPressed: () async {
                       HapticFeedback.lightImpact();
                       if (formKey.currentState!.validate()) {
-                        if(getCategoryId(productSpecializationController.text)==0){
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("enter a correct category")),);
-                        }else {
                        await   webServices.addProduct(
                             productName:productNameController.text ,
                             productDescription:productDescriptionController.text ,
                             productPrice: double.parse(productPriceController.text),
-                            categoryId:getCategoryId(productSpecializationController.text ,),
+                            categoryId:selected.id!,
                             imageFile: _imgFile!,
                             );
                        await webServices.getCategory();
-
                        context.pop();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text("product added successfully")),);
-
-                        }
-
                       }
                     },
                     style: ElevatedButton.styleFrom(

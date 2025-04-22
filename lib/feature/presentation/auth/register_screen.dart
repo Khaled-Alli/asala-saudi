@@ -83,6 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textFormController: passwordController,
                     hintText: 'Enter your password',
                     validator: (String) => paswwordValidator(String),
+                    isPassword: true,
                   ),
                   const SizedBox(height: 10),
                   Row(
